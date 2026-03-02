@@ -89,7 +89,7 @@ export default function FileList({ files, loading, onRefresh }: FileListProps) {
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                             <File size={20} style={{ color: 'var(--accent-color)' }} />
                                             <span style={{ fontWeight: 500, wordBreak: 'break-all' }}>
-                                                {file.key.split('-').slice(1).join('-') || file.key}
+                                                {file.key.replace('depo/', '').split('-').slice(1).join('-') || file.key.replace('depo/', '')}
                                             </span>
                                         </div>
                                     </td>

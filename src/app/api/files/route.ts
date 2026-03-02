@@ -6,11 +6,12 @@ export async function GET() {
     try {
         const command = new ListObjectsV2Command({
             Bucket: BUCKET_NAME,
+            Prefix: 'depo/',
         });
 
         const response = await s3Client.send(command);
 
-        const files = response.Contents?.map((item) => ({
+        const files = response.Contents?.filter(item => item.Key !== 'depo/').map((item) => ({
             key: item.Key,
             size: item.Size,
             lastModified: item.LastModified,

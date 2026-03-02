@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
 
         if (action === 'create') {
             const { filename, type } = body;
-            const key = `${Date.now()}-${filename.replace(/[^a-zA-Z0-9.\-_]/g, '')}`;
+            const key = `depo/${Date.now()}-${filename.replace(/[^a-zA-Z0-9.\-_]/g, '')}`;
 
             const command = new CreateMultipartUploadCommand({
                 Bucket: BUCKET_NAME,
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
 
         if (action === 'signStandard') {
             const { filename, type } = body;
-            const key = `${Date.now()}-${filename.replace(/[^a-zA-Z0-9.\-_]/g, '')}`;
+            const key = `depo/${Date.now()}-${filename.replace(/[^a-zA-Z0-9.\-_]/g, '')}`;
 
             const command = new PutObjectCommand({
                 Bucket: BUCKET_NAME,
