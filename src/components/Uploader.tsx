@@ -26,8 +26,23 @@ export default function Uploader({ onUploadSuccess }: UploaderProps) {
         }).use(AwsS3, {
             limit: 4,
             // In newer Uppy versions with AwsS3, we can provide custom functions for multipart:
-            getUploadParameters(file) {
-                return { method: 'POST', url: '', fields: {} };
+            async getUploadParameters(file) {
+                const res = await fetch('/api/multipart', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'signStandard', filename: file.name, type: file.type }),
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error);
+
+                return {
+                    method: 'PUT',
+                    url: data.url,
+                    fields: {},
+                    headers: {
+                        'Content-Type': file.type || 'application/octet-stream',
+                    }
+                };
             },
             shouldUseMultipart: (file) => (file.size || 0) > 100 * 1024 * 1024, // >100MB uses multipart
             // Multipart API Implementation

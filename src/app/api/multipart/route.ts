@@ -5,6 +5,7 @@ import {
     CompleteMultipartUploadCommand,
     AbortMultipartUploadCommand,
     ListPartsCommand,
+    PutObjectCommand,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { s3Client, BUCKET_NAME } from '@/lib/s3';
@@ -26,6 +27,20 @@ export async function POST(req: NextRequest) {
 
             const response = await s3Client.send(command);
             return NextResponse.json({ uploadId: response.UploadId, key });
+        }
+
+        if (action === 'signStandard') {
+            const { filename, type } = body;
+            const key = `${Date.now()}-${filename.replace(/[^a-zA-Z0-9.\-_]/g, '')}`;
+
+            const command = new PutObjectCommand({
+                Bucket: BUCKET_NAME,
+                Key: key,
+                ContentType: type || 'application/octet-stream',
+            });
+
+            const url = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
+            return NextResponse.json({ url });
         }
 
         if (action === 'signPart') {
