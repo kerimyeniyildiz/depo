@@ -125,6 +125,9 @@ export default function Uploader({ onUploadSuccess }: UploaderProps) {
                 width="100%"
                 height={350}
                 proudlyDisplayPoweredByUppy={false}
+                hideProgressDetails={false}
+                hideRetryButton={false}
+                hidePauseResumeButton={false}
             />
         </div>
     );
